@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealFlow AI — Competitive Intelligence Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a08;
+  --paper: #f5f3ee;
+  --paper2: #ede9e0;
+  --rule: rgba(0,0,0,0.1);
+  --rule-heavy: rgba(0,0,0,0.25);
+  --muted: #7a7770;
+  --muted2: #b5b2ab;
+  --accent: #0a0a08;
+  --serif-display: 'Bebas Neue', sans-serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* GRAIN OVERLAY */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* PROGRESS */
+#prog { position:fixed;top:0;left:0;height:2px;background:var(--ink);z-index:1000;width:0;transition:width 0.1s; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(245,243,238,0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule-heavy);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+}
+.nav-logo { font-family: var(--serif-display); font-size: 1.4rem; letter-spacing: 0.05em; color: var(--ink); }
+.nav-links { display:flex; list-style:none; gap:0; }
+.nav-links a {
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  color: var(--muted); padding: 0 0.9rem; height: 52px;
+  display:flex; align-items:center;
+  border-right: 1px solid var(--rule);
+  transition: all 0.2s;
+}
+.nav-links li:first-child a { border-left: 1px solid var(--rule); }
+.nav-links a:hover { color: var(--ink); background: var(--rule); }
+.nav-links a.on { background: var(--ink); color: var(--paper); }
+@media(max-width:900px){ .nav-links { display:none; } }
+
+/* HERO */
+.hero {
+  min-height: 100vh; padding-top: 52px;
+  background: var(--ink);
+  display: grid; grid-template-rows: 1fr auto;
+  position: relative; overflow: hidden;
+}
+.hero-lines {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 60px);
+}
+.hero-content {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto; width: 100%;
+  padding: 8rem 2rem 4rem;
+}
+.hero-kicker {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-kicker::before { content:''; width:36px; height:1px; background:rgba(255,255,255,0.3); }
+.hero h1 {
+  font-family: var(--serif-display);
+  font-size: clamp(4rem, 9vw, 10rem);
+  color: var(--paper);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  margin-bottom: 2.5rem;
+}
+.hero h1 span { color: rgba(255,255,255,0.2); }
+.hero-desc {
+  font-size: 1.05rem; color: rgba(255,255,255,0.5);
+  max-width: 60ch; margin-bottom: 4rem; line-height: 1.85;
+}
+.hero-stats {
+  display: grid; grid-template-columns: repeat(5,1fr);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2.5rem; gap: 0;
+}
+.hs { padding-right: 1.5rem; border-right: 1px solid rgba(255,255,255,0.07); }
+.hs:first-child { padding-left: 0; }
+.hs:last-child { border-right: none; }
+.hs-n { font-family: var(--serif-display); font-size: 2.4rem; color: var(--paper); display:block; line-height:1; margin-bottom:0.35rem; }
+.hs-l { font-family: var(--mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); display:block; line-height:1.45; }
+.hero-foot {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto; width: 100%;
+  padding: 1.2rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display:flex; justify-content:space-between;
+}
+.hero-foot span { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.2); }
+
+/* SECTION LAYOUT */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+section { position: relative; }
+.sec-head { padding: 5rem 0 3rem; border-bottom: 1px solid var(--rule-heavy); margin-bottom: 3.5rem; }
+.sec-tag {
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted2);
+  margin-bottom: 0.8rem; display:block;
+}
+.sec-n { font-family: var(--mono); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rule-heavy); display:block; margin-bottom: 0.35rem; }
+h2 {
+  font-family: var(--serif-display);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 0.95; letter-spacing: 0.02em; font-weight: 400;
+}
+h3 { font-family: var(--sans); font-size: 1.1rem; font-weight: 700; }
+h4 { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+p { color: #4a4844; font-size: 0.95rem; line-height: 1.85; }
+strong { color: var(--ink); font-weight: 600; }
+.sp { height: 1rem; }
+
+/* CALLOUT BLOCK */
+.callout {
+  border-left: 3px solid var(--ink);
+  padding: 1.4rem 2rem;
+  background: var(--paper2);
+  margin: 2rem 0;
+}
+.callout.warn { border-left-color: #c0392b; background: #fdf5f4; }
+.callout.ok { border-left-color: #1a7a45; background: #f0faf5; }
+.callout p { font-size: 0.95rem; color: var(--ink); }
+
+/* RULE DIVIDER */
+.rule-heavy { border:none; border-top: 2px solid var(--ink); margin: 2.5rem 0; }
+.rule-light { border:none; border-top: 1px solid var(--rule); margin: 1.5rem 0; }
+
+/* DATA TABLE */
+.dt-wrap { overflow-x: auto; margin: 1.5rem 0; }
+.dt {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.dt thead th {
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--ink); color: var(--paper);
+  padding: 0.85rem 1.2rem; text-align: left;
+}
+.dt tbody td {
+  padding: 0.95rem 1.2rem; border-bottom: 1px solid var(--rule);
+  color: #4a4844; vertical-align: top;
+}
+.dt tbody tr:nth-child(even) td { background: var(--paper2); }
+.dt tbody tr:hover td { background: rgba(0,0,0,0.04); }
+.dt tbody td:first-child { font-weight: 600; color: var(--ink); }
+.tag { display:inline-block; font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.08em; padding:0.2rem 0.55rem; background:var(--ink); color:var(--paper); text-transform:uppercase; }
+.tag.out { background:transparent; border:1px solid var(--ink); color:var(--ink); }
+.tag.win { background:#0a3d1f; color:white; }
+.tag.threat { background:#7a0000; color:white; }
+
+/* SECTION BARS */
+.sbar {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.65rem 1.2rem; margin: 2rem 0 1.2rem;
+}
+.sbar.inv { background: var(--paper2); color: var(--ink); border: 1px solid var(--rule-heavy); }
+
+/* PROBLEM SECTION */
+#problem { background: var(--paper); padding: 0 0 5rem; }
+
+.problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule-heavy); margin: 2rem 0; }
+.pgc {
+  padding: 2.5rem;
+  border-right: 1px solid var(--rule-heavy);
+  border-bottom: 1px solid var(--rule-heavy);
+}
+.pgc:nth-child(even) { border-right: none; }
+.pgc:last-child, .pgc:nth-last-child(2) { border-bottom: none; }
+.pgc-num { font-family: var(--serif-display); font-size: 3rem; color: var(--ink); display:block; line-height:1; margin-bottom:0.4rem; }
+.pgc-label { font-family: var(--mono); font-size: 0.65rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.6rem; }
+
+/* FUNNEL VIZ */
+.funnel { border: 1px solid var(--rule-heavy); margin: 2rem 0; }
+.frow { display: grid; grid-template-columns: 180px 1fr 80px; border-bottom: 1px solid var(--rule); align-items: center; }
+.frow:last-child { border-bottom: none; }
+.frow.hdr { background: var(--paper2); }
+.frow-s { font-family:var(--mono); font-size:0.65rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding:0.9rem 1.2rem; border-right: 1px solid var(--rule); }
+.frow-bw { padding: 0.7rem 1.2rem; border-right: 1px solid var(--rule); }
+.frow-bar { height: 6px; background: var(--ink); width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+.frow-pct { font-family:var(--mono); font-size:0.78rem; font-weight:500; color:var(--ink); padding:0.9rem 1rem; text-align:right; }
+
+/* PLAYERS SECTION */
+#players { background: var(--paper2); padding: 0 0 5rem; }
+#players .sec-head { background: var(--paper2); }
+
+.tier-label { font-family:var(--mono); font-size:0.62rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); padding:0.55rem 0; border-top:1px solid var(--rule-heavy); border-bottom:1px solid var(--rule-heavy); margin-bottom:1.5rem; }
+
+.player-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5px; background:var(--rule-heavy); border:1px solid var(--rule-heavy); margin-bottom:3rem; }
+.player-grid.three { grid-template-columns:1fr 1fr 1fr; }
+.pc {
+  background:var(--paper2);
+  padding:2.2rem; cursor:pointer; transition:background 0.2s; position:relative;
+}
+.pc:hover { background:#e8e5dc; }
+.pc.open { background:var(--ink); }
+.pc.open h3, .pc.open p, .pc.open h4 { color:rgba(255,255,255,0.6); }
+.pc.open h3 { color:white; }
+.pc.open .ptag { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7); }
+.pc.open .gap-flag { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+.pc.open .gap-flag p { color:rgba(255,255,255,0.5); }
+.ptag { display:inline-block; font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.08em; padding:0.2rem 0.5rem; background:var(--rule); color:var(--muted); text-transform:uppercase; margin-bottom:0.8rem; }
+.pc h4 { margin-bottom:0.5rem; }
+.pc h3 { margin-bottom:0.8rem; font-size:1.1rem; }
+.gap-flag { margin-top:1.2rem; padding:0.9rem; background:var(--paper); border:1px solid var(--rule-heavy); }
+.gap-flag-label { font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:#7a0000; display:block; margin-bottom:0.3rem; }
+.gap-flag p { font-size:0.83rem; color:var(--muted); }
+
+/* ARCHITECTURE */
+#arch { background: var(--ink); color: white; padding: 0 0 5rem; }
+#arch .sec-head { border-bottom-color: rgba(255,255,255,0.1); }
+#arch .sec-tag { color: rgba(255,255,255,0.25); }
+#arch h2 { color: white; }
+#arch p { color: rgba(255,255,255,0.5); }
+#arch h3 { color: white; }
+#arch h4 { color: rgba(255,255,255,0.35); }
+
+.arch-stack {
+  border: 1px solid rgba(255,255,255,0.1);
+  margin: 2.5rem 0;
+}
+.arch-layer {
+  display: grid; grid-template-columns: 80px 2fr 1.5fr 1.5fr;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.arch-layer:last-child { border-bottom: none; }
+.arch-layer.header-row {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.arch-ln {
+  font-family: var(--mono); font-size: 0.6rem; font-weight:500;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color: rgba(255,255,255,0.2);
+  padding: 1.8rem 1rem;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:flex-start; justify-content:center;
+}
+.arch-c {
+  padding: 1.8rem;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.arch-c:last-child { border-right: none; }
+.arch-c h4 { color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; font-size: 0.6rem; }
+.arch-c h3 { color: white; margin-bottom: 0.65rem; font-size: 0.9rem; }
+.arch-c p { font-size: 0.85rem; color: rgba(255,255,255,0.45); }
+.arch-c.featured { background: rgba(255,255,255,0.03); }
+
+.layer-badge {
+  display: inline-block;
+  font-family: var(--mono); font-size: 0.6rem; font-weight:500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem; margin-bottom: 0.6rem;
+}
+.lb-we { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+.lb-above { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+.lb-below { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+
+.comp-map {
+  border: 1px solid rgba(255,255,255,0.1); margin: 2rem 0;
+}
+.cm-row {
+  display: grid; grid-template-columns: 160px 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  align-items: stretch;
+}
+.cm-row:last-child { border-bottom: none; }
+.cm-row.hdr { background: rgba(255,255,255,0.04); border-bottom-color: rgba(255,255,255,0.12); }
+.cm-c {
+  padding: 1.1rem 1.3rem;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.875rem; color: rgba(255,255,255,0.5);
+}
+.cm-c:last-child { border-right: none; }
+.cm-row.hdr .cm-c { font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.3); padding:0.7rem 1.3rem; }
+.cm-c:first-child { font-weight:700; color:rgba(255,255,255,0.85); }
+.cm-row.highlight .cm-c { background: rgba(255,255,255,0.04); }
+.cm-row.highlight .cm-c:first-child { color: white; }
+.check { color: rgba(255,255,255,0.85); font-weight:700; }
+.cross { color: rgba(255,255,255,0.2); }
+.partial { color: rgba(255,255,255,0.5); }
+
+/* SWOT SECTION */
+#swot { background: var(--paper); padding: 0 0 5rem; }
+
+.swot-nav { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+.swot-btn {
+  font-family:var(--mono); font-size:0.63rem; font-weight:500;
+  letter-spacing:0.1em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--rule-heavy);
+  padding:0.45rem 1rem; cursor:pointer; color:var(--muted);
+  transition:all 0.2s;
+}
+.swot-btn:hover, .swot-btn.on { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+
+.swot-card { display:none; }
+.swot-card.active { display:block; }
+
+.swot-header {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: flex-start; gap: 2rem;
+  margin-bottom: 2.5rem; padding-bottom: 2rem;
+  border-bottom: 2px solid var(--ink);
+}
+.swot-name { font-family: var(--serif-display); font-size: clamp(2.5rem,5vw,4.5rem); line-height: 0.9; }
+.swot-meta { text-align: right; }
+.swot-meta .funding { font-family:var(--mono); font-size:1.1rem; font-weight:500; color:var(--ink); display:block; }
+.swot-meta .type { font-family:var(--mono); font-size:0.62rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+.swot-matrix {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; border: 1px solid var(--rule-heavy);
+  margin-bottom: 2rem;
+}
+.swot-q {
+  padding: 2rem; border-right: 1px solid var(--rule-heavy);
+  border-bottom: 1px solid var(--rule-heavy);
+}
+.swot-q:nth-child(even) { border-right: none; }
+.swot-q:last-child, .swot-q:nth-last-child(2) { border-bottom: none; }
+.swot-q.S { border-top: 3px solid #1a7a45; }
+.swot-q.W { border-top: 3px solid #7a0000; }
+.swot-q.O { border-top: 3px solid #0a3d5f; }
+.swot-q.T { border-top: 3px solid #6b4400; }
+.swot-q-label {
+  font-family: var(--mono); font-size: 0.62rem; font-weight:500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1rem; display:block;
+}
+.swot-q ul { list-style: none; display:flex; flex-direction:column; gap:0.5rem; }
+.swot-q li {
+  font-size: 0.875rem; color: #4a4844;
+  padding-left: 1rem; position: relative; line-height: 1.6;
+}
+.swot-q li::before { content:''; position:absolute; left:0; top:0.58em; width:4px; height:4px; background:var(--muted2); }
+
+.gap-analysis {
+  border: 1px solid var(--ink); padding: 2rem;
+  background: var(--ink); color: white;
+  margin-bottom: 2rem;
+}
+.gap-analysis .ga-label {
+  font-family:var(--mono); font-size:0.62rem; font-weight:500;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); margin-bottom:0.75rem; display:block;
+}
+.gap-analysis h4 { color:white; font-size:0.85rem; margin-bottom:0.6rem; }
+.gap-analysis p { font-size:0.875rem; color:rgba(255,255,255,0.6); }
+
+/* GAPS SECTION */
+#gaps { background: var(--paper2); padding: 0 0 5rem; }
+#gaps .sec-head { background: var(--paper2); }
+
+.filter-row { display:flex; gap:0.4rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.fbtn {
+  font-family:var(--mono); font-size:0.62rem; font-weight:500;
+  letter-spacing:0.1em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--rule-heavy);
+  padding:0.4rem 0.9rem; cursor:pointer; color:var(--muted);
+  transition:all 0.2s;
+}
+.fbtn:hover, .fbtn.on { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+
+.gnum { font-family: var(--serif-display); font-size: 1.4rem; color: var(--muted2); }
+
+/* WIN SECTION */
+#win { background: var(--paper); padding: 0 0 5rem; }
+
+.win-matrix { border:1px solid var(--rule-heavy); margin:2rem 0; }
+.wm-row { display:grid; grid-template-columns:180px 1fr 1fr 1fr; border-bottom:1px solid var(--rule); align-items:stretch; }
+.wm-row:last-child { border-bottom:none; }
+.wm-row.hdr { background:var(--ink); }
+.wm-c { padding:1.1rem 1.3rem; border-right:1px solid var(--rule); font-size:0.875rem; color:#4a4844; }
+.wm-c:last-child { border-right:none; }
+.wm-row.hdr .wm-c { font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); border-right-color:rgba(255,255,255,0.08); }
+.wm-c:first-child { font-weight:700; color:var(--ink); }
+.wm-row.hi .wm-c { background:#f0faf5; }
+.wm-row.hi .wm-c:first-child { color:#0a3d1f; }
+
+.evidence-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--rule-heavy); margin:2rem 0; }
+.ev { padding:1.8rem 1.5rem; border-right:1px solid var(--rule); }
+.ev:last-child { border-right:none; }
+.ev-n { font-family:var(--serif-display); font-size:2.5rem; color:var(--ink); display:block; line-height:1; margin-bottom:0.35rem; }
+.ev-l { font-family:var(--mono); font-size:0.62rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.25rem; }
+.ev-s { font-size:0.75rem; color:var(--muted2); font-style:italic; }
+
+/* TIMELINE / ROADMAP */
+#roadmap { background: var(--paper2); padding: 0 0 5rem; }
+#roadmap .sec-head { background: var(--paper2); }
+
+.phases { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--rule-heavy); margin:2rem 0; }
+.ph { padding:2.2rem; border-right:1px solid var(--rule-heavy); }
+.ph:last-child { border-right:none; }
+.ph-n { font-family:var(--mono); font-size:0.6rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted2); display:block; margin-bottom:0.3rem; }
+.ph-title { font-family:var(--serif-display); font-size:1.6rem; color:var(--ink); display:block; margin-bottom:0.3rem; }
+.ph-time { font-family:var(--mono); font-size:0.65rem; color:var(--muted); display:block; margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid var(--rule); }
+.ph ul { list-style:none; display:flex; flex-direction:column; gap:0.45rem; }
+.ph li { font-size:0.83rem; color:#4a4844; padding-left:0.9rem; position:relative; line-height:1.5; }
+.ph li::before { content:''; position:absolute; left:0; top:0.55em; width:3px; height:3px; background:var(--muted2); }
+.ph-stat { margin-top:1.3rem; padding-top:1.3rem; border-top:1px solid var(--rule); font-family:var(--mono); font-size:0.65rem; color:var(--muted); }
+.ph-stat strong { display:block; font-family:var(--serif-display); font-size:1.2rem; font-weight:400; color:var(--ink); margin-bottom:0.2rem; }
+
+/* CONCLUSION */
+#conclusion { background: var(--ink); color: white; padding: 0 0 6rem; }
+#conclusion .sec-head { border-bottom-color: rgba(255,255,255,0.1); }
+#conclusion .sec-tag { color: rgba(255,255,255,0.25); }
+#conclusion h2 { color: white; }
+#conclusion p { color: rgba(255,255,255,0.5); }
+#conclusion h3 { color: white; }
+
+.five-gaps {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0; border: 1px solid rgba(255,255,255,0.1);
+  margin: 2.5rem 0;
+}
+.fg {
+  display: grid; grid-template-columns: 64px 1fr;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.fg:last-child { border-bottom: none; }
+.fg-n {
+  font-family: var(--serif-display); font-size: 2rem; color: rgba(255,255,255,0.12);
+  display:flex; align-items:flex-start; justify-content:center;
+  padding: 1.8rem 0.5rem;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.fg-c { padding: 1.8rem 2rem; }
+.fg-c h3 { color: white; font-size: 1rem; margin-bottom: 0.6rem; }
+.fg-c p { font-size: 0.875rem; color: rgba(255,255,255,0.45); }
+.fg-c .evidence { font-family:var(--mono); font-size:0.62rem; font-weight:500; letter-spacing:0.08em; color:rgba(255,255,255,0.25); margin-top:0.6rem; display:block; }
+
+footer {
+  background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem 2rem; text-align: center;
+}
+footer p { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.18); }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(14px); transition:opacity 0.55s ease,transform 0.55s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .hero-stats { grid-template-columns:repeat(3,1fr); }
+  .problem-grid { grid-template-columns:1fr; }
+  .player-grid { grid-template-columns:1fr; }
+  .player-grid.three { grid-template-columns:1fr; }
+  .swot-matrix { grid-template-columns:1fr; }
+  .swot-matrix .swot-q:nth-child(even) { border-right:none; border-bottom:1px solid var(--rule-heavy); }
+  .arch-layer { grid-template-columns:1fr; }
+  .arch-ln { writing-mode:initial; }
+  .phases { grid-template-columns:1fr 1fr; }
+  .evidence-grid { grid-template-columns:1fr 1fr; }
+  .cm-row { grid-template-columns:120px 1fr 1fr; }
+  .wm-row { grid-template-columns:120px 1fr 1fr; }
+  .cm-row .cm-c:last-child, .wm-row .wm-c:last-child { display:none; }
+}
+@media(max-width:600px){
+  h2 { font-size:2.2rem; }
+  .hero-stats { grid-template-columns:1fr 1fr; }
+  .phases { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <div class="nav-logo">DealFlow AI</div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#players">Players</a></li>
+    <li><a href="#arch">Architecture</a></li>
+    <li><a href="#swot">SWOT</a></li>
+    <li><a href="#gaps">Gaps</a></li>
+    <li><a href="#win">Where We Win</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">Competitive Intelligence Report — March 2026</div>
+    <h1>DEAL<br>FLOW<br><span>AI</span></h1>
+    <p class="hero-desc">A complete competitive SWOT analysis of the Dubai proptech landscape. Who owns what, where they stop, and precisely how we sit between the raw lead and the closed deal without competing with a single incumbent.</p>
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-n">$4B+</span><span class="hs-l">Broker commission pool 2025</span></div>
+      <div class="hs"><span class="hs-n">40K</span><span class="hs-l">Licensed Dubai brokers Jan 2026</span></div>
+      <div class="hs"><span class="hs-n">94%</span><span class="hs-l">Leads that go unconverted</span></div>
+      <div class="hs"><span class="hs-n">22%</span><span class="hs-l">Indian share of all transactions</span></div>
+      <div class="hs"><span class="hs-n">Zero</span><span class="hs-l">AI-native NRI platforms today</span></div>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <span>MSP for Sanali Group</span>
+    <span>Confidential — For Discussion Only</span>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">01 — Problem Statement</span>
+      <div class="sec-tag">The $4B market bleeding revenue daily</div>
+      <h2>THE CATASTROPHE<br>OF THE UNCONVERTED LEAD</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:2.5rem;">Dubai's real estate market generates over $4 billion in broker commissions annually. Yet 94% of every inbound lead goes unconverted. Not because the buyers aren't real. Because the infrastructure to qualify, nurture, and route them to the right broker at the right moment simply does not exist.</p>
+
+    <div class="problem-grid">
+      <div class="pgc reveal"><span class="pgc-num">70-80%</span><span class="pgc-label">Of social media leads are junk</span><p>Fake numbers, window shoppers, and zero-budget browsers. Agents act as human spam filters, burning out within months.</p></div>
+      <div class="pgc reveal"><span class="pgc-num">5-15min</span><span class="pgc-label">Optimal response window</span><p>Buyers message 10+ agents simultaneously. The first relevant, professional response wins the client. Humans attending viewings cannot compete.</p></div>
+      <div class="pgc reveal"><span class="pgc-num">AED 18K</span><span class="pgc-label">Average monthly broker income</span><p>While top 5% of agents capture 40%+ of platform leads, the majority earn less than AED 18,000/month — high churn drives constant re-hiring costs.</p></div>
+      <div class="pgc reveal"><span class="pgc-num">3.5M</span><span class="pgc-label">Indian diaspora in UAE alone</span><p>Indians are the #1 foreign buyer at 22% of all transactions, investing AED 35B annually. Zero AI platform speaks to them in Hindi, understands FEMA, or automates LRS compliance.</p></div>
+    </div>
+
+    <h3 style="margin:2.5rem 0 1rem;">The Conversion Funnel: Where Revenue Bleeds</h3>
+    <div class="funnel" id="funnelEl">
+      <div class="frow hdr"><div class="frow-s">Stage</div><div class="frow-bw" style="font-family:var(--mono);font-size:0.62rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:0.8rem 1.2rem;">Retention</div><div class="frow-pct" style="font-family:var(--mono);font-size:0.62rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Rate</div></div>
+      <div class="frow"><div class="frow-s">Raw Lead</div><div class="frow-bw"><div class="frow-bar" data-w="100%"></div></div><div class="frow-pct">100%</div></div>
+      <div class="frow"><div class="frow-s">Contact Made</div><div class="frow-bw"><div class="frow-bar" data-w="50%"></div></div><div class="frow-pct">40-60%</div></div>
+      <div class="frow"><div class="frow-s">Qualified</div><div class="frow-bw"><div class="frow-bar" data-w="20%"></div></div><div class="frow-pct">15-25%</div></div>
+      <div class="frow"><div class="frow-s">Viewing Booked</div><div class="frow-bw"><div class="frow-bar" data-w="12%"></div></div><div class="frow-pct">8-15%</div></div>
+      <div class="frow"><div class="frow-s">Viewing Done</div><div class="frow-bw"><div class="frow-bar" data-w="8%"></div></div><div class="frow-pct">5-10%</div></div>
+      <div class="frow"><div class="frow-s">Offer Made</div><div class="frow-bw"><div class="frow-bar" data-w="5%"></div></div><div class="frow-pct">3-6%</div></div>
+      <div class="frow"><div class="frow-s">Deal Closed</div><div class="frow-bw"><div class="frow-bar" data-w="3%"></div></div><div class="frow-pct">2-5%</div></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The core insight:</strong> Dubai real estate does not have a lead generation problem. It has a catastrophic lead management and triage problem. 90% of large-ticket Dubai transactions happen after 30 days of consistent nurturing — yet no existing tool automates this nurturing workflow. That is the exact gap DealFlow AI fills.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PLAYERS -->
+<section id="players">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">02 — The Competitive Landscape</span>
+      <div class="sec-tag">Portals, startups, CRMs, consultancies, and Indian portals</div>
+      <h2>WHO OWNS<br>WHAT AND WHERE<br>THEY STOP</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:2.5rem;">The Dubai proptech ecosystem has over $1.5B in deployed capital across portals, AI startups, CRM tools, and cross-border consultancies. Every player has a defensible core and a meaningful blind spot. Understanding where they stop is where the product strategy begins. Click any card to expand.</p>
+
+    <div class="tier-label">Tier 1 — Portal Giants (The Duopoly) — $1B+ combined funding</div>
+    <div class="player-grid">
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 525M raised — Permira + Blackstone + Ares</div>
+        <h4>Property Portal</h4>
+        <h3>Property Finder</h3>
+        <p>$117M UAE revenue, 60%+ EBITDA margins. AI Home Valuation with 6-month forecasts. Credit Optimizer: +26% more leads, -30% CPL. PropSpace CRM divested but partnership maintained. SuperAgent ML scoring for 4,000+ agents.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap for DealFlow AI</span><p>Zero NRI buyer journey product. No Hindi/Urdu language support. No FEMA compliance tools. No WhatsApp-native conversational AI. India is a top-3 traffic source yet receives no NRI-specific conversion path.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 500M+ total — EMPG / Naspers / OLX Group</div>
+        <h4>Property Portal</h4>
+        <h3>Bayut / Dubizzle</h3>
+        <p>87M+ monthly visits. BayutGPT (MENA's first AI property search, Sept 2023). TruEstimate AVM: 500K+ reports, 94-97% accuracy. Acquired Property Monitor April 2025 (7,700+ professional users). H1 2025 revenue $117M, +37% YoY.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap for DealFlow AI</span><p>BayutGPT is a discovery tool only — no lead qualification, no WhatsApp nurturing, no conversion AI. Trustpilot average 1.5 stars. Users report "95% of what's listed is fake or non-existent." Same lead distributed to 10+ agents simultaneously.</p></div>
+      </div>
+    </div>
+
+    <div class="tier-label">Tier 2 — AI PropTech Startups (6 players — $200M+ combined, all narrowly focused)</div>
+    <div class="player-grid three">
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 5M pre-seed — a16z Speedrun (Feb 2026)</div>
+        <h4>Investor AI Analytics</h4>
+        <h3>Smart Bricks</h3>
+        <p>Agentic AI for RE investing. 95% AVM accuracy. Angels from OpenAI, Anthropic, DeepMind. Multi-market from day one (US, UK, UAE). Accepted into Google AI First, Microsoft GrowthX, NVIDIA Inception.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap</span><p>Investor analytics infrastructure, not a broker conversion tool. No WhatsApp integration, no lead nurturing, no NRI targeting. Completely different value chain from the $4B commission market.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 1.5M pre-seed — Plus VC (June 2025)</div>
+        <h4>Investment Analytics</h4>
+        <h3>Prop AI</h3>
+        <p>3B+ verified DLD data points. First AI Seal of Excellence from Dubai Centre for AI. Fake listing classifier removed 59,000 non-compliant listings. Fair Market Value Model at 92% accuracy. B2B tools for brokers "upcoming."</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap</span><p>Data product for institutions, not a lead conversion platform. No NRI targeting, no WhatsApp chatbot, no cross-border compliance. DealFlow AI can reach brokers first with tools that complement Prop AI's analytics.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 100M+ — Balderton Capital / Peak XV</div>
+        <h4>Mortgage FinTech</h4>
+        <h3>Huspy</h3>
+        <p>Processes 25-30% of Dubai residential mortgages. $7B+ in annual transactions. GCC's first AI WhatsApp mortgage chatbot (Dubai AI Week 2025). Series B of $59M (July 2025). Expanding to Spain and Saudi Arabia.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap / Partnership Target</span><p>Mortgage-only. Does not own the pre-mortgage phase: property discovery, NRI qualification, FEMA compliance. DealFlow AI handles lead-to-qualified-buyer; Huspy handles the mortgage. Natural partnership, not competition.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 2M pre-seed — Salica Oryx Fund</div>
+        <h4>Listing Automation</h4>
+        <h3>Coraly.ai</h3>
+        <p>First MENA proptech to earn RESO certification. Processed 1M+ listings, 500M images for 1,200+ RE professionals in 25 countries. Users save 20+ hours/week. Multi-portal publishing to PF, Bayut, Dubizzle, Rightmove.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap / Complementary Tool</span><p>Automates listing supply (creating the listing). DealFlow AI converts listing demand (qualifying the buyer who inquires). No overlap, clear complementary positioning. Coraly creates great listings; DealFlow AI converts the leads they generate.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">USD 44M total — Comcast Ventures, 01 Advisors, Acrew</div>
+        <h4>B2C Buyer Advisory</h4>
+        <h3>Nomad Homes</h3>
+        <p>$44M raised from Zillow, Opendoor, Compass angels. Positions as digital concierge bypassing traditional brokers. Private Client service for AED 10M+ portfolios. Multi-market: Dubai, France, Spain, Portugal.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap — Cautionary Tale</span><p>Bypasses brokers rather than enabling them. Every transaction requires a human advisor — unscalable. ZoomInfo flags "very low activity levels." Their struggle proves the broker-replacement model fails. Our broker-enabler model is validated by their difficulty.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">AI branding, minimal tech infrastructure</div>
+        <h4>Off-Plan Specialist</h4>
+        <h3>JustOffPlan.ai</h3>
+        <p>16+ years of off-plan market knowledge via parent DXBOffplan.com (2006). Multi-language: English, Arabic, Persian. Content depth across Dubai developments. Basic AI chatbot overlay on existing listing site.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap</span><p>Content site with AI branding, not a real AI proptech. No VC funding, no broker tools, no lead scoring, no CRM integration, no WhatsApp AI, no NRI features. Not a meaningful competitive threat.</p></div>
+      </div>
+    </div>
+
+    <div class="tier-label">Tier 3 — CRM and Operations Tools</div>
+    <div class="player-grid">
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">Independent since Sept 2024 (divested from Property Finder)</div>
+        <h4>Dubai's Dominant RE CRM</h4>
+        <h3>PropSpace CRM</h3>
+        <p>Longest-running dedicated RE CRM in UAE (founded 2012). Used by Engel & Volkers, Savills, Chestertons, Emaar, Coldwell Banker. Comprehensive listing management, deal workflow, portal syndication. Trustpilot 4 stars (29 reviews). Former Google, Yahoo, IBM, Microsoft engineering team.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap — Integration Opportunity</span><p>Stores leads but cannot score, qualify, or nurture them with AI. "AI-powered farming" is basic rule-based automation. No WhatsApp conversational AI. No NRI features. PropSpace integration should be DealFlow AI's priority — brokers already use it as system of record. We add the intelligence layer on top.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">Multiple vendors — SleekFlow, WACTO, Wati, WebMaxy</div>
+        <h4>Generic WhatsApp API Tools</h4>
+        <h3>WhatsApp Business Platforms</h3>
+        <p>8M+ UAE WhatsApp users. 90%+ message open rates. Industry experts: "WhatsApp Business is not optional for Dubai brokers in 2025." Multiple API platforms serve UAE businesses. SleekFlow, WACTO, Wati, and WebMaxy all offer broadcast messaging and basic automation.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap</span><p>All platforms are generic: no Dubai RE-specific NLP training, no DLD pricing data, no payment plan knowledge, no Hindi/multilingual AI, no FEMA compliance, no lead scoring. They're broadcast tools. DealFlow AI is a conversational conversion engine built for RE specifically.</p></div>
+      </div>
+    </div>
+
+    <div class="tier-label">Tier 4 — Indian Portals and Cross-Border Consultancies</div>
+    <div class="player-grid">
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">Times Group backed — India's #1 portal by listings</div>
+        <h4>Indian Property Portal</h4>
+        <h3>MagicBricks</h3>
+        <p>1.5M+ active listings across 50+ Indian cities. ~$37M revenue, recently profitable. PropWorth valuation tool (98% accuracy). NRI section exists but only covers Indian property management for NRIs, not overseas investment guidance.</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap — Zero Dubai Presence</span><p>NRI users with foreign phone numbers literally cannot register on the MagicBricks app. Trustpilot NRI reviews: "NRIs do not use this company — log in is impossible for NRIs." DealFlow AI intercepts the NRI buyer journey exactly where MagicBricks abandons it: when they start looking at Dubai.</p></div>
+      </div>
+      <div class="pc" onclick="togglePc(this)">
+        <div class="ptag">Info Edge (NSE/BSE listed) — 442 Dubai listings via ListGlobally</div>
+        <h4>Indian Property Portal</h4>
+        <h3>99acres</h3>
+        <p>Owned by Info Edge (Naukri parent). 442+ Dubai listings via ListGlobally.com partnership. Prices in Indian Rupees. Extensive NRI content covering FEMA, documentation, POA. Q1 FY26 revenue ₹110.7 crore (+26% YoY profit growth).</p>
+        <div class="gap-flag"><span class="gap-flag-label">Critical Gap — Proves Demand, Executes Poorly</span><p>Dubai listings are thin, unverified, with no DLD integration or RERA compliance checks. No FEMA automation, no LRS calculator, no Golden Visa eligibility tool. 99acres proves the India-Dubai demand exists but cannot capitalize on it. DealFlow AI captures this demand properly.</p></div>
+      </div>
+    </div>
+
+    <div class="tier-label">Tier 5 — India-Dubai Cross-Border Consultancies (Service model, not technology)</div>
+    <div class="callout">
+      <p><strong>Property Kumbh, Danube India offices, Sobha India events, India-based NRI consultancies:</strong> These are service companies running Dubai Property Expos in Mumbai, Delhi, Hyderabad, and Chandigarh earning 1-3% referral fees. Danube has offices in 6 Indian cities. Sobha runs annual metro events. <strong>Critical distinction: all service companies, not technology platforms.</strong> No AI layer, no WhatsApp automation, no compliance intelligence. Sanali Group's existing relationships in this circuit are direct distribution channels for DealFlow AI — the tech layer these consultancies need and currently lack.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="arch">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">03 — System Architecture</span>
+      <div class="sec-tag">Where DealFlow AI sits in the stack</div>
+      <h2>THE LAYER NOBODY<br>HAS BUILT</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:2.5rem;">The proptech stack has three clear levels: portals generate listings and raw leads at the top; CRMs store and manage data at the bottom; and human brokers sit in the middle manually triaging everything. DealFlow AI occupies the missing middle layer — the conversion intelligence layer between raw lead and qualified handoff.</p>
+
+    <div class="arch-stack">
+      <div class="arch-layer header-row">
+        <div class="arch-ln"></div>
+        <div class="arch-c"><h4>Layer</h4></div>
+        <div class="arch-c"><h4>Who Sits Here</h4></div>
+        <div class="arch-c"><h4>Gap / Opportunity</h4></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-ln">TOP</div>
+        <div class="arch-c">
+          <span class="layer-badge lb-above">Above Us</span>
+          <h3>Lead Generation and Portal Layer</h3>
+          <p>Property Finder, Bayut, social media advertising, developer websites, referral networks. Raw, unqualified lead volume at AED 20-50 per lead. 70-80% are junk.</p>
+        </div>
+        <div class="arch-c">
+          <p>Property Finder, Bayut, Meta Ads, Google Ads, Instagram, Property Kumbh expos. These players generate the lead volume that DealFlow AI operates on.</p>
+        </div>
+        <div class="arch-c">
+          <p>We do not compete here. We receive the leads these platforms generate. We are their partner, not their competitor. We increase the ROI of their lead volume for every broker.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-ln">US</div>
+        <div class="arch-c featured">
+          <span class="layer-badge lb-we">DealFlow AI</span>
+          <h3>Conversion Intelligence Layer</h3>
+          <p>WhatsApp-native AI qualification. NRI compliance guidance. Intent scoring. Property matching from live DLD data. CMA generation. Viewing booking. Lead card handoff to broker.</p>
+        </div>
+        <div class="arch-c featured">
+          <p><strong style="color:white;">This layer does not exist today.</strong> No product qualifies, scores, nurtures, and routes Dubai RE leads automatically in Hindi, English, Arabic, Russian, and Mandarin with FEMA compliance and DLD data embedded. This is the gap.</p>
+        </div>
+        <div class="arch-c featured">
+          <p>We intercept the lead before the broker sees it. We deliver a fully scored, context-rich lead card. The broker's first interaction is with a warm, qualified, compliant buyer — not a raw phone number.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-ln">MID</div>
+        <div class="arch-c">
+          <span class="layer-badge lb-below">Integration Target</span>
+          <h3>Broker Workflow and CRM Layer</h3>
+          <p>PropSpace CRM, Salesforce, HubSpot, internal brokerage systems. This is where brokers manage their pipeline, track deals, and coordinate with developers.</p>
+        </div>
+        <div class="arch-c">
+          <p>PropSpace CRM (dominant), Salesforce (enterprise), HubSpot (mid-market), custom brokerage tools. DealFlow AI integrates natively into PropSpace via API — zero workflow disruption.</p>
+        </div>
+        <div class="arch-c">
+          <p>DealFlow AI enriches CRM records with intent scores, conversation transcripts, NRI compliance status, and property match data. The CRM becomes dramatically more valuable with AI layer above it.</p>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-ln">BOT</div>
+        <div class="arch-c">
+          <span class="layer-badge lb-below">Data Source</span>
+          <h3>Market Data and Compliance Layer</h3>
+          <p>DLD open data APIs (1.6M+ transactions), Ejari rental contracts (8.4M+), RERA broker registry, Trakheesi advertising permits, DLD Mo'asher price index.</p>
+        </div>
+        <div class="arch-c">
+          <p>Dubai Pulse free API, DLD transaction database, RERA broker verification, RBI/FEMA regulations (India), Veriff/Jumio KYC APIs, ComplyAdvantage AML.</p>
+        </div>
+        <div class="arch-c">
+          <p>DealFlow AI builds on top of these public data sources with India-specific regulatory intelligence layered on top. The combination is unique. No competitor has both.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:white;margin:2.5rem 0 1.2rem;">How We Position: Complement, Not Compete</h3>
+    <div class="comp-map">
+      <div class="cm-row hdr">
+        <div class="cm-c">Player</div>
+        <div class="cm-c">What They Do Well</div>
+        <div class="cm-c">Our Relationship to Them</div>
+        <div class="cm-c">DealFlow AI Adds</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-c">Property Finder</div>
+        <div class="cm-c">Generate premium leads at 3-5% conversion. Portal trust. AI valuation.</div>
+        <div class="cm-c"><span class="check">Partner.</span> Their leads flow into DealFlow AI for qualification. We increase their CPL ROI for every broker using both.</div>
+        <div class="cm-c">Hindi/NRI qualification layer, WhatsApp conversion, FEMA compliance that PF cannot build.</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-c">Bayut</div>
+        <div class="cm-c">Highest traffic volume in UAE. TruEstimate AVM. DLD data partnership.</div>
+        <div class="cm-c"><span class="check">Partner.</span> Bayut's SmartLeads data feeds into DealFlow AI scoring. We convert what Bayut generates but cannot close.</div>
+        <div class="cm-c">WhatsApp conversational AI, NRI targeting, lead nurturing automation Bayut's portal model cannot provide.</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-c">PropSpace CRM</div>
+        <div class="cm-c">Lead storage, deal workflow, portal sync. Trusted by top brokerages.</div>
+        <div class="cm-c"><span class="check">Integration partner.</span> DealFlow AI plugs into PropSpace via API. We are the intelligence layer on top of PropSpace's data layer.</div>
+        <div class="cm-c">AI intent scoring, NRI compliance flags, WhatsApp transcript capture, automated lead enrichment.</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-c">Huspy</div>
+        <div class="cm-c">25-30% of Dubai mortgages. UAE bank relationships. AI mortgage chatbot.</div>
+        <div class="cm-c"><span class="check">Partnership target.</span> DealFlow AI qualifies the buyer and captures intent; Huspy converts the financing. Sequential, not competitive.</div>
+        <div class="cm-c">Pre-mortgage buyer qualification, property matching, NRI compliance documentation that Huspy's mortgage flow can use directly.</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-c">Coraly.ai</div>
+        <div class="cm-c">Listing creation automation, SEO copywriting, multi-portal publishing.</div>
+        <div class="cm-c"><span class="check">Complementary.</span> Coraly creates the supply-side listing; DealFlow AI converts the demand-side inquiry. No overlap, clear joint value.</div>
+        <div class="cm-c">Converts the leads generated by Coraly's listings. Closes the demand side that Coraly's supply side opens.</div>
+      </div>
+      <div class="cm-row highlight">
+        <div class="cm-c">DealFlow AI</div>
+        <div class="cm-c">Conversion intelligence layer. WhatsApp AI. NRI compliance. Lead scoring. DLD CMA. 5-language support.</div>
+        <div class="cm-c"><strong style="color:#0a3d1f;">The missing middle.</strong> No player occupies this layer. We are not a portal, not a CRM, not a mortgage tool, not an analytics platform.</div>
+        <div class="cm-c">The entire conversion journey from raw lead to broker-ready, compliance-cleared, intent-scored buyer handoff.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SWOT -->
+<section id="swot">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">04 — SWOT Analysis</span>
+      <div class="sec-tag">Per-competitor strengths, weaknesses, opportunities, threats</div>
+      <h2>FULL SWOT<br>MATRICES</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:2rem;">Select a competitor to view the full SWOT analysis with DealFlow AI's specific exploitation gap for each.</p>
+
+    <div class="swot-nav">
+      <button class="swot-btn on" onclick="showSwot('pf',this)">Property Finder</button>
+      <button class="swot-btn" onclick="showSwot('bayut',this)">Bayut</button>
+      <button class="swot-btn" onclick="showSwot('propspace',this)">PropSpace CRM</button>
+      <button class="swot-btn" onclick="showSwot('huspy',this)">Huspy</button>
+      <button class="swot-btn" onclick="showSwot('smartbricks',this)">Smart Bricks</button>
+      <button class="swot-btn" onclick="showSwot('propai',this)">Prop AI</button>
+      <button class="swot-btn" onclick="showSwot('coraly',this)">Coraly.ai</button>
+      <button class="swot-btn" onclick="showSwot('nomad',this)">Nomad Homes</button>
+      <button class="swot-btn" onclick="showSwot('magic',this)">MagicBricks</button>
+      <button class="swot-btn" onclick="showSwot('99acres',this)">99acres</button>
+    </div>
+
+    <!-- PROPERTY FINDER -->
+    <div class="swot-card active" id="swot-pf">
+      <div class="swot-header">
+        <div><div class="sec-tag">Portal Giant — Tier 1</div><div class="swot-name">PROPERTY<br>FINDER</div></div>
+        <div class="swot-meta"><span class="funding">$775M+</span><span class="type">Total funding raised</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">$117M UAE revenue 2024</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>$2B+ valuation, $525M from Permira and Blackstone (Sept 2025) plus $250M Ares debt — best-capitalised proptech in MENA</li>
+          <li>60%+ EBITDA margins on $117M UAE core revenue — structural profitability moat</li>
+          <li>PropSpace CRM divestiture creates partnership potential with 35,000+ broker users</li>
+          <li>AI Home Valuation with 6-month price forecasts — only forward-looking AVM on any portal</li>
+          <li>Credit Optimizer AI pilot: +26% leads, 30% lower CPL — proven AI ROI for brokers</li>
+          <li>SuperAgent ML scoring of 4,000+ agents creates a performance data advantage</li>
+          <li>DLD Mo'asher price index integration provides regulatory credibility</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>Trustpilot: broker complaints include "3 months, zero enquiries" and "super expensive" — ROI narrative challenged</li>
+          <li>Engagement per listing fell 36% (2022-2025) as listing volume grew 34% — saturation signal</li>
+          <li>Bayut overtook PF in UAE total traffic by December 2025 per SimilarWeb</li>
+          <li>PropSpace divestiture created CRM dependency on a now-independent entity — misaligned incentives</li>
+          <li>India is top-3 traffic source but receives zero NRI-specific product investment</li>
+          <li>Portal model generates leads but cannot qualify, nurture, or convert them</li>
+          <li>WhatsApp integration is third-party (HubSpot/NEXA), not native</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>$250M Ares financing specifically earmarked for AI acceleration and regional expansion</li>
+          <li>Stake investment (fractional ownership) signals embedded fintech ambition</li>
+          <li>PF Academy endorsed by DLD could become a certification and broker-training moat</li>
+          <li>WhatsApp Business API integration is a logical next move given broker demand</li>
+          <li>NRI-focused product tier could monetise the India traffic they already receive</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Bayut IPO (postponed but returning) would provide a well-capitalised competitor with public visibility</li>
+          <li>Three-broker rule per listing limits inventory breadth per agency</li>
+          <li>Engagement decline per listing threatens the core value proposition for broker ROI</li>
+          <li>DLD disintermediation (VYOM, Mo'asher direct) could bypass portals for primary developer inventory</li>
+          <li>Dubai market correction would directly reduce broker portal spend</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Exploitation Gap</span><h4>The NRI Conversion Gap — India is their #3 traffic source with zero monetisation</h4><p>Property Finder publishes generic blog posts about buying property from India but has invested zero product development in NRI-specific tooling. No Hindi language interface, no LRS calculator, no FEMA compliance automation, no Golden Visa eligibility checker. Yet India is already a top-3 traffic source. DealFlow AI converts the NRI leads Property Finder generates but cannot close — positioning us as a value-add partner rather than a competitor, while capturing the referral fee on every NRI closing that Property Finder's portal initiates but cannot complete.</p></div>
+    </div>
+
+    <!-- BAYUT -->
+    <div class="swot-card" id="swot-bayut">
+      <div class="swot-header">
+        <div><div class="sec-tag">Portal Giant — Tier 1</div><div class="swot-name">BAYUT</div></div>
+        <div class="swot-meta"><span class="funding">$500M+</span><span class="type">Total funding (EMPG/Naspers)</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">87M monthly visits</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>UAE's highest traffic portal: 87M+ monthly visits with 400M+ page views annually</li>
+          <li>Exclusive DLD MoU (Jan 2022): access to ownership histories, Ejari rental contracts — impossible to replicate via scraping</li>
+          <li>TruEstimate AVM: 500,000+ valuation reports at claimed 94-97% accuracy — industry-leading AVM tool</li>
+          <li>Property Monitor acquisition (April 2025): 7,700+ professional users, 55% revenue CAGR, deep analytics moat</li>
+          <li>H1 2025 revenue $117M (+37% YoY), UAE segment net profit $43M — approaching profitability</li>
+          <li>BayutGPT launched September 2023 — MENA's first AI property search assistant</li>
+          <li>4,000+ agency partners and 6,600+ TruBroker-certified agents — dense professional network</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>Trustpilot average: 1.5 stars (49 reviews). Users report "95% of listings are fake or non-existent," "contacted 300 properties, got 2 replies"</li>
+          <li>Sales team accused (Glassdoor) of generating "fake leads to make it look better for clients" — lead quality credibility issue</li>
+          <li>BayutGPT is consumer search only — no broker-facing qualification, no conversion, no nurturing</li>
+          <li>Lead conversion rate 2-2.5% vs Property Finder's 3-5% — lower buyer intent per lead</li>
+          <li>IPO planned for DFM was postponed (October 2025) — investor uncertainty signal</li>
+          <li>Response to complaints can exceed 78 days — operational quality gap</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Property Monitor acquisition positions Bayut as data-analytics powerhouse for institutional clients</li>
+          <li>Saudi Arabia expansion: 3.5M monthly sessions, 2,300 clients by April 2025 — massive adjacent market</li>
+          <li>ProConnect (launched Jan 2025) agent-to-agent collaboration network could evolve into deal-sharing marketplace</li>
+          <li>IPO, when executed, provides significant capital for AI acceleration</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Property Finder's $775M+ total funding and proven 60%+ EBITDA margins present a formidable well-capitalised rival</li>
+          <li>Fake listing complaints documented by Trustpilot could trigger DLD regulatory scrutiny</li>
+          <li>Lead quality reputation damage reduces broker ROI confidence</li>
+          <li>Dubizzle classifieds business facing disruption from vertical-specific platforms</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Exploitation Gap</span><h4>BayutGPT is discovery-only — the conversion layer is completely absent</h4><p>BayutGPT helps buyers search for properties, but it stops the moment the search is complete. No lead qualification, no WhatsApp nurturing, no FEMA compliance, no Hindi language support, no conversion tracking. Bayut distributes the same lead to 10+ agents simultaneously — creating the exact competition-for-the-same-lead problem that destroys conversion rates. DealFlow AI sits after Bayut in the funnel, converting the leads Bayut generates at 2-2.5% into closes. We need Bayut's lead volume. Bayut needs our conversion capability. This is a distribution partnership waiting to happen.</p></div>
+    </div>
+
+    <!-- PROPSPACE -->
+    <div class="swot-card" id="swot-propspace">
+      <div class="swot-header">
+        <div><div class="sec-tag">CRM Layer — Integration Target</div><div class="swot-name">PROPSPACE<br>CRM</div></div>
+        <div class="swot-meta"><span class="funding">Independent</span><span class="type">Divested from PF Sept 2024</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">35,000+ broker users</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>UAE's longest-running dedicated RE CRM since 2012 — deep institutional trust and market penetration</li>
+          <li>Used by Engel & Volkers, Savills, Chestertons, Emaar, Coldwell Banker — blue-chip brokerage validation</li>
+          <li>Trustpilot 4 stars (29 reviews) — positive user sentiment compared to portals</li>
+          <li>Deep portal syndication: Property Finder, Bayut, Dubizzle, Rightmove integrations all native</li>
+          <li>DLD compliance tools: Trakheesi permit tracking, ownership verification built in</li>
+          <li>WhatsApp lead capture integration: messages from portals can flow into PropSpace pipeline</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>"AI-powered farming" is basic rule-based automation, not genuine machine learning</li>
+          <li>No intent scoring, no conversion prediction, no lead quality assessment</li>
+          <li>WhatsApp integration is link-sharing only — no conversational AI, no automated nurturing</li>
+          <li>No mobile app (documented user complaint on GetApp)</li>
+          <li>Customisation charges for templates — flexibility limited</li>
+          <li>Post-divestiture uncertainty: newly independent company, unclear long-term product roadmap</li>
+          <li>No NRI-specific features, no cross-border compliance, no multilingual buyer communication tools</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Independence from Property Finder creates incentive to integrate with all platforms including DealFlow AI</li>
+          <li>AI layer addition (scoring, prediction, nurturing) would dramatically increase CRM value and retention</li>
+          <li>Mobile app development would address the most-cited user gap</li>
+          <li>Developer module expansion could serve the 200+ off-plan developers directly</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Property Finder may build competing CRM features post-divestiture to re-capture broker workflow data</li>
+          <li>Bayut's Profolio tool could expand beyond basic analytics into full CRM functionality</li>
+          <li>AI-native CRM startups entering the market could leapfrog PropSpace's legacy architecture</li>
+          <li>Post-divestiture financial constraints may limit R&D investment</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Exploitation Gap</span><h4>PropSpace is the system of record — we add the intelligence layer on top</h4><p>PropSpace stores broker leads but cannot score them, qualify them, or act on them intelligently. DealFlow AI integrates directly into PropSpace via API — when a lead arrives in PropSpace from any source (portal, WhatsApp, referral, social media), DealFlow AI's WhatsApp conversation AI engages the lead automatically, qualifies them, scores their intent, and enriches the PropSpace record with full conversation transcript, NRI compliance status, budget confirmation, and matched property data. The broker wakes up to a scored, annotated pipeline instead of a list of phone numbers. PropSpace becomes dramatically more valuable. DealFlow AI captures the referral fee on every converted lead.</p></div>
+    </div>
+
+    <!-- HUSPY -->
+    <div class="swot-card" id="swot-huspy">
+      <div class="swot-header">
+        <div><div class="sec-tag">Mortgage FinTech — Partnership Target</div><div class="swot-name">HUSPY</div></div>
+        <div class="swot-meta"><span class="funding">$100M+</span><span class="type">Total funding — Balderton, Peak XV</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">$7B+ annual transactions</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>Commands 25-30% of Dubai residential mortgage market — structural market position</li>
+          <li>$59M Series B (July 2025) from Balderton Capital — tier-1 European VC validation</li>
+          <li>GCC's first AI WhatsApp mortgage chatbot (April 2025, Dubai AI Week) — first-mover in AI mortgage</li>
+          <li>Relationships with 20+ UAE banks — distribution moat for financing products</li>
+          <li>Spanish market expansion: top-3 in Valencia by transaction volume within a year — replicable playbook</li>
+          <li>Saudi Arabia expansion underway — regional diversification reduces UAE concentration risk</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>AI chatbot is mortgage comparison only — no property discovery, no buyer qualification, no investment analysis</li>
+          <li>No AVM, no investment analytics, no fake listing detection</li>
+          <li>Agent tools are utility-focused (submit mortgage applications) not intelligence-focused</li>
+          <li>Glassdoor reviews cite "lack of strategy" and political internal culture — execution risk</li>
+          <li>Profitable status not publicly confirmed despite large scale ($7B GMV)</li>
+          <li>No NRI-specific product despite Peak XV (India-origin VC) backing — missed opportunity</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Expanding AI chatbot to full buyer journey (pre-mortgage qualification) is logical next step</li>
+          <li>Partnership with DealFlow AI: we deliver qualified, mortgage-ready buyers; Huspy closes the financing</li>
+          <li>NRI-specific mortgage product (NRE account-backed financing, DTAA-optimised structures) is genuinely unaddressed</li>
+          <li>BNPL for property deposits could unlock a new asset class in UAE</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>UAE banks building direct digital mortgage platforms could bypass Huspy's intermediary position</li>
+          <li>Mortgage broking regulation tightening in UAE could increase compliance costs</li>
+          <li>Interest rate environment changes directly impact mortgage demand</li>
+          <li>Property Finder's Mortgage Finder product competes for the same broker-to-mortgage referral flow</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Partnership Strategy</span><h4>Sequential partnership: DealFlow AI qualifies the buyer; Huspy closes the financing</h4><p>Huspy's $59M Series B and 25-30% mortgage market share makes it the dominant financier in Dubai residential RE. But their AI chatbot handles only mortgage comparisons — they do not own the pre-mortgage phase where NRI buyers navigate FEMA limits, LRS tracking, and property selection. DealFlow AI qualifies the NRI buyer, selects the right property, calculates their LRS utilisation, and connects them to Huspy for mortgage execution. We generate Huspy-ready leads; Huspy closes them. A formal referral partnership would give DealFlow AI an additional revenue stream while dramatically increasing Huspy's NRI lead quality. This is not competition — it is vertical integration of the buyer journey.</p></div>
+    </div>
+
+    <!-- SMART BRICKS -->
+    <div class="swot-card" id="swot-smartbricks">
+      <div class="swot-header">
+        <div><div class="sec-tag">Investor AI — Different Value Chain</div><div class="swot-name">SMART<br>BRICKS</div></div>
+        <div class="swot-meta"><span class="funding">$5M</span><span class="type">Pre-seed — a16z Speedrun (Feb 2026)</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">OAI + Anthropic angels</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>a16z Speedrun backing — most prestigious pre-seed signal in AI/tech globally</li>
+          <li>Angels from OpenAI, Anthropic, DeepMind — exceptional technical advisory network</li>
+          <li>Multi-market from day one (US, UK, UAE) — global ambition with funding to match</li>
+          <li>Founded by Mohamed Mohamed with Blackstone, Goldman Sachs, BCG, McKinsey background — institutional credibility</li>
+          <li>99% workflow automation claim — if proven, represents genuine AI-first product architecture</li>
+          <li>Google AI First, Microsoft GrowthX, NVIDIA Inception — government and enterprise ecosystem access</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>No disclosed traction metrics, users, revenue, or live partnerships — still pre-product</li>
+          <li>Product claims (99% automation, months to minutes) are unverified marketing assertions</li>
+          <li>No broker-facing product, no B2B platform, no lead generation tools</li>
+          <li>No DLD integration, no local compliance features, no WhatsApp API</li>
+          <li>Investor-focused analytics serve a different (and smaller) market than the $4B broker commission pool</li>
+          <li>Very recent funding (Feb 2026) — product likely 12-18 months from meaningful market presence</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>MENA institutional real estate investment is growing — sovereign wealth funds, family offices</li>
+          <li>Data analytics platform could expand to broker tools after proving investor product</li>
+          <li>a16z relationships could unlock US institutional capital into Dubai RE</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Prop AI has 18-month head start in DLD data analytics with government AI certification</li>
+          <li>Well-capitalised portals can replicate investor analytics features internally</li>
+          <li>Pre-seed stage means 18-24 months before market presence — a lot can change</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>Completely different markets — Smart Bricks is Bloomberg for RE; DealFlow AI is Salesforce for RE</h4><p>Smart Bricks targets institutional investors and wealth managers who want to automate real estate portfolio analysis. DealFlow AI targets the 40,000 licensed brokers who need to convert the 94% of leads they currently abandon. These are different buyers, different price points, different pain points, and different value chains. There is zero overlap. If Smart Bricks succeeds in the institutional analytics space, it validates the broader AI-in-RE-MENA thesis, which is good for DealFlow AI's fundraising narrative. No competitive concern.</p></div>
+    </div>
+
+    <!-- PROP AI -->
+    <div class="swot-card" id="swot-propai">
+      <div class="swot-header">
+        <div><div class="sec-tag">Data Intelligence — Complementary Tool</div><div class="swot-name">PROP AI</div></div>
+        <div class="swot-meta"><span class="funding">$1.5M</span><span class="type">Pre-seed — Plus VC (June 2025)</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">3B+ DLD data points</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>First-ever AI Seal of Excellence from Dubai Centre for AI — strongest government validation in the space</li>
+          <li>3B+ verified DLD data points — deepest proprietary data asset of any startup in Dubai RE</li>
+          <li>Fake listing classifier removed 59,000 non-compliant listings from analysis — real market utility</li>
+          <li>Fair Market Value Model at 92% accuracy — competitive with Bayut's TruEstimate (94-97%)</li>
+          <li>Founder Ranime El Skaff (ex-McKinsey, Harvard Business School) — strong credibility signal</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>Only $1.5M raised (not $6M as initially reported) — severely limited build and go-to-market capacity</li>
+          <li>~25 employees, Dubai-only coverage — scaling capacity highly constrained</li>
+          <li>B2B broker tools "upcoming" — not yet live, meaning no broker revenue today</li>
+          <li>Revenue model relies on traditional brokerage commissions — not SaaS economics</li>
+          <li>No WhatsApp integration, no NRI targeting, no cross-border compliance features</li>
+          <li>Investment analytics product requires buyer sophistication that most brokers lack</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Government AI certification creates a pathway to DLD official data partnership at scale</li>
+          <li>B2B broker tools launch could open SaaS revenue stream independent of transaction volume</li>
+          <li>Real estate fraud detection is a growing government priority in UAE — policy tailwind</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Property Monitor (Bayut acquisition) has comparable analytics depth with 7,700+ active users already</li>
+          <li>Smart Bricks' a16z backing gives them superior capital access for the same analytics market</li>
+          <li>Undercapitalised at $1.5M — competitor or acquirer could leapfrog before they scale</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>Data partnership opportunity — Prop AI's 3B DLD data points can enrich DealFlow AI's CMA generation</h4><p>Prop AI's fake listing classifier and fair market value model are exactly the kind of data enrichment that DealFlow AI's CMA generation function needs. Rather than competing, DealFlow AI should pursue a data licensing or partnership agreement with Prop AI — their DLD data accuracy enhances DealFlow AI's NRI buyer CMA quality, and DealFlow AI's broker distribution gives Prop AI's analytics reach that their $1.5M funding cannot buy directly. Prop AI's government AI certification also adds credibility to DealFlow AI's compliance narrative if used as a data partner.</p></div>
+    </div>
+
+    <!-- CORALY -->
+    <div class="swot-card" id="swot-coraly">
+      <div class="swot-header">
+        <div><div class="sec-tag">Listing Automation — Clear Complement</div><div class="swot-name">CORALY.AI</div></div>
+        <div class="swot-meta"><span class="funding">$2M</span><span class="type">Pre-seed — Salica Oryx Fund</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">1M+ listings processed</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>First MENA proptech to earn RESO certification for global MLS data exchange — international interoperability standard</li>
+          <li>1M+ listings, 500M images processed for 1,200+ RE professionals in 25 countries — proven at scale</li>
+          <li>Users save 20+ hours/week and close deals 47% faster — documented ROI</li>
+          <li>Multi-portal publishing: Property Finder, Bayut, Dubizzle, Rightmove, Zoopla — broadest coverage</li>
+          <li>Founder Fouad Bekkar (ex-Property Finder, founder of HomeValue.ai acquired by PF) — insider advantage</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>Purely agent-side supply tool — no buyer-facing product of any kind</li>
+          <li>No lead conversion capabilities beyond basic after-hours qualification claims</li>
+          <li>No ROI/valuation analytics, no compliance tools, no WhatsApp-native AI</li>
+          <li>$2M funding limits growth relative to well-capitalised portals and CRMs</li>
+          <li>Narrow wedge (listing creation) is easily replicable by portals adding AI copywriting features</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>RESO certification opens US and UK international markets beyond MENA</li>
+          <li>Lead capture expansion: after-hours inquiry qualification is a natural product adjacency</li>
+          <li>Partnership with DealFlow AI creates a full supply-side and demand-side workflow bundle</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Property Finder and Bayut could add AI listing creation as a portal feature, commoditising Coraly's core</li>
+          <li>OpenAI/Anthropic-based generic AI writing tools could replace listing automation at near-zero cost</li>
+          <li>Narrow wedge creates vulnerability to bundling by larger platforms</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>Perfect complement: Coraly creates the listing supply; DealFlow AI converts the demand</h4><p>Coraly.ai and DealFlow AI represent the two missing halves of the broker productivity equation. Coraly automates the creation and distribution of listings across all portals. DealFlow AI automates the qualification and conversion of the buyers who respond to those listings. A broker using both tools would have fully automated supply creation and demand conversion — essentially running an AI-powered brokerage workflow end-to-end. Joint selling to the same 1,200+ Coraly agents who already pay for listing automation is a natural DealFlow AI distribution channel. Propose a white-label or API integration to cross-sell DealFlow AI to Coraly's customer base.</p></div>
+    </div>
+
+    <!-- NOMAD -->
+    <div class="swot-card" id="swot-nomad">
+      <div class="swot-header">
+        <div><div class="sec-tag">B2C Advisory — Cautionary Tale</div><div class="swot-name">NOMAD<br>HOMES</div></div>
+        <div class="swot-meta"><span class="funding">$44M</span><span class="type">Series A — Comcast, 01 Advisors</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">Zillow, Opendoor angels</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>$44M raised from Comcast Ventures, 01 Advisors, Acrew Capital — credible investor names</li>
+          <li>Strategic angels from Zillow, Opendoor, and Compass — validated by US proptech insiders</li>
+          <li>First-mover in buyer representation model in Dubai — category creator positioning</li>
+          <li>Private Client service for AED 10M+ portfolios — premium segment access</li>
+          <li>Multi-market (Dubai, France, Spain, Portugal) — geographic diversification</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>ZoomInfo flags "very low activity levels" relative to peers — potential stagnation signal despite $44M raised</li>
+          <li>Every transaction requires a human advisor — fundamentally unscalable model</li>
+          <li>Not yet profitable as of early 2024 with significant multi-market burn</li>
+          <li>Bypasses brokers rather than enabling them — misaligned with the regulatory and cultural reality of Dubai RE</li>
+          <li>No NRI-specific targeting, no WhatsApp-native tools, no compliance automation</li>
+          <li>High headcount requirements across four markets — capital-intensive at scale</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>AI layer addition could reduce human advisor dependency and improve unit economics</li>
+          <li>Ultra-luxury (AED 10M+) private client market could justify human advisor model if volume is low enough</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>Dubai broker regulations require RERA-licensed agents for transactions — buyer advisory without RERA creates legal exposure</li>
+          <li>Portals could add buyer representation services internally with existing broker relationships</li>
+          <li>Human-dependent model cannot achieve competitive pricing against AI-native competitors</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>Nomad validates the problem; their model failure validates our approach</h4><p>Nomad Homes proved that Dubai buyers will pay for guided property acquisition services. Their struggle (low activity despite $44M raised) proves that the human-first concierge model is unscalable. DealFlow AI takes the same insight — buyers need guidance — and delivers it at scale through AI. Where Nomad replaces brokers, DealFlow AI empowers them. This is the critical strategic distinction. Nomad's difficulties are a live case study that validates the broker-enabler model over the broker-replacement model. We point to Nomad's trajectory every time someone asks why we work with brokers rather than bypassing them.</p></div>
+    </div>
+
+    <!-- MAGICBRICKS -->
+    <div class="swot-card" id="swot-magic">
+      <div class="swot-header">
+        <div><div class="sec-tag">Indian Portal — India-Dubai Gateway Opportunity</div><div class="swot-name">MAGIC<br>BRICKS</div></div>
+        <div class="swot-meta"><span class="funding">Times Group</span><span class="type">Publicly listed parent company</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">1.5M+ active listings</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>India's largest property portal — 1.5M+ active listings across 50+ cities</li>
+          <li>Times Group backing provides credibility, distribution, and media amplification</li>
+          <li>PropWorth valuation tool with claimed 98% accuracy — India-market AVM</li>
+          <li>PropViz and BlueTickVR acquisitions for 3D property visualisation — tech forward</li>
+          <li>Now profitable with IPO considerations — solid financial foundation</li>
+          <li>Strong NRI mindshare for Indian property management among diaspora</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>NRI users with foreign phone numbers literally cannot register — fundamental UX failure for target demographic</li>
+          <li>Trustpilot NRI reviews: "NRIs do not use this company — log in is impossible for NRIs"</li>
+          <li>Completely India-focused: NRI section covers Indian property management, not overseas investment</li>
+          <li>Zero Dubai market presence, no DLD data access, no RERA compliance tools, no Arabic language</li>
+          <li>India-portal mindset cannot translate to Dubai's off-plan, commission-driven, multi-national market structure</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Launching a Dubai section with DLD data integration could capture massive NRI investment intent already on-platform</li>
+          <li>Overseas property investment section for UAE, UK, US would address documented NRI demand</li>
+          <li>Partnership with Dubai developers for co-branded listings would require minimal new infrastructure</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>99acres already has 442 Dubai listings (albeit thin) — may develop before MagicBricks acts</li>
+          <li>DealFlow AI builds the India-Dubai gateway that MagicBricks fails to provide</li>
+          <li>Government of India's overseas investment regulations could tighten, reducing NRI real estate appetite</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>We intercept the NRI buyer journey exactly where MagicBricks abandons it</h4><p>MagicBricks captures NRI mindshare for Indian property but completely ignores Dubai investment intent — their NRI users cannot even register with foreign phone numbers. DealFlow AI can partner with MagicBricks as a "Dubai Property Powered by DealFlow AI" embedded widget or referral partnership, giving MagicBricks a Dubai section that their technology team doesn't need to build. We capture the NRI buyer the moment they express Dubai intent; MagicBricks provides the lead source from their 1.5M listing user base. This is a distribution partnership with one of the largest RE portals in India, available precisely because MagicBricks has no Dubai capability at all.</p></div>
+    </div>
+
+    <!-- 99ACRES -->
+    <div class="swot-card" id="swot-99acres">
+      <div class="swot-header">
+        <div><div class="sec-tag">Indian Portal — Proves Demand, Executes Poorly</div><div class="swot-name">99ACRES</div></div>
+        <div class="swot-meta"><span class="funding">Info Edge</span><span class="type">NSE/BSE listed parent (Naukri)</span><span class="funding" style="font-size:0.8rem;margin-top:0.5rem">442 Dubai listings (unverified)</span></div>
+      </div>
+      <div class="swot-matrix">
+        <div class="swot-q S"><span class="swot-q-label">Strengths</span><ul>
+          <li>Only Indian portal with actual Dubai property listings (442 via ListGlobally partnership)</li>
+          <li>Prices displayed in Indian Rupees — reducing friction for NRI buyers calculating affordability</li>
+          <li>Extensive NRI content: FEMA guidance, documentation, POA procedures — editorial credibility</li>
+          <li>Q1 FY26 revenue ₹110.7 crore (+26% YoY profit growth) — financially stable parent</li>
+          <li>Info Edge's Naukri platform provides access to high-income Indian professionals — ideal NRI buyer profile</li>
+        </ul></div>
+        <div class="swot-q W"><span class="swot-q-label">Weaknesses</span><ul>
+          <li>442 Dubai listings are thin, unverified, and posted by Indian channel partners — not DLD-registered inventory</li>
+          <li>No DLD data integration, no RERA compliance checks, no escrow verification — trust gap</li>
+          <li>No Golden Visa calculator, no LRS tracker, no automated FEMA compliance embedded in transaction flow</li>
+          <li>Whistleblower complaint under investigation at parent level (September 2025) — reputational risk</li>
+          <li>ConsumerComplaints reviews cite "complete fraud" on paid packages — service delivery failures</li>
+          <li>Despite Dubai listings, no transactional capability — just a listing page, not a buying journey</li>
+        </ul></div>
+        <div class="swot-q O"><span class="swot-q-label">Opportunities</span><ul>
+          <li>Naukri's 700M+ registered users include high-income professionals — premier NRI buyer audience</li>
+          <li>Embedding DLD-verified Dubai listings with compliance automation would transform their Dubai section</li>
+          <li>Developer partnerships for off-plan co-marketing to Naukri/99acres user base</li>
+        </ul></div>
+        <div class="swot-q T"><span class="swot-q-label">Threats</span><ul>
+          <li>DealFlow AI builds the end-to-end NRI Dubai buying experience 99acres cannot</li>
+          <li>India-side regulatory changes on overseas investment could reduce their Dubai content relevance</li>
+          <li>MagicBricks could develop proper Dubai integration given sufficient strategic priority</li>
+        </ul></div>
+      </div>
+      <div class="gap-analysis"><span class="ga-label">DealFlow AI Position</span><h4>99acres proves the India-Dubai demand is real — we deliver what they cannot</h4><p>99acres' 442 Dubai listings confirm there is documented NRI intent for Dubai property visible through Indian portals. But their listings are unverified, their compliance guidance is editorial not automated, and their transaction flow ends at a phone number or email. DealFlow AI should white-label a "Dubai property search powered by DealFlow AI" widget for 99acres — we provide DLD-verified inventory, automated FEMA compliance checking, Hindi conversational AI for follow-up, and LRS tracking. 99acres provides the massive NRI traffic that their Naukri parent is uniquely positioned to deliver. This is a B2B distribution deal available because 99acres has the audience but not the technology to monetise it in Dubai.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GAPS -->
+<section id="gaps">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">05 — Gap Analysis</span>
+      <div class="sec-tag">Where every competitor stops and we start</div>
+      <h2>8 STRUCTURAL GAPS<br>NOBODY HAS FILLED</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:1.5rem;">These are not incremental improvements. They are structural absences in the market — products that do not exist despite clear demand, documented pain points, and no competitor positioned to build them quickly.</p>
+
+    <div class="filter-row">
+      <button class="fbtn on" onclick="filterGaps('all',this)">All 8</button>
+      <button class="fbtn" onclick="filterGaps('core',this)">Core Platform</button>
+      <button class="fbtn" onclick="filterGaps('nri',this)">NRI Specific</button>
+      <button class="fbtn" onclick="filterGaps('enterprise',this)">Enterprise</button>
+      <button class="fbtn" onclick="filterGaps('quick',this)">Fastest to Build</button>
+    </div>
+
+    <div class="dt-wrap">
+      <table class="dt" id="gapTable">
+        <thead><tr><th>#</th><th>Structural Gap</th><th>Why Nobody Has Built It</th><th>Revenue Model</th><th>Estimated TAM</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr data-cat="core nri quick">
+            <td class="gnum">01</td>
+            <td><strong>NRI buyer journey AI</strong> — WhatsApp-native, FEMA-aware, 5-language conversational qualification</td>
+            <td>Portals are English/Arabic-first. Indian portals have no DLD access. No player combines NRI compliance with conversational AI on WhatsApp.</td>
+            <td>Lead referral fees + broker SaaS</td>
+            <td><strong>USD 50-120M</strong></td>
+            <td><span class="tag win">Primary</span></td>
+          </tr>
+          <tr data-cat="core quick">
+            <td class="gnum">02</td>
+            <td><strong>AI lead scoring for Dubai brokers</strong> — intent, budget, timeline, nationality-aware before first human contact</td>
+            <td>PropSpace has zero AI scoring. 70-80% of portal leads are junk. No product converts raw leads to a ranked, nationality-segmented broker pipeline.</td>
+            <td>SaaS: AED 800-2,000/agent/month</td>
+            <td><strong>USD 96-240M ARR</strong></td>
+            <td><span class="tag win">Primary</span></td>
+          </tr>
+          <tr data-cat="core quick">
+            <td class="gnum">03</td>
+            <td><strong>WhatsApp AI for broker nurture</strong> — Dubai RE-specific NLP, DLD pricing, off-plan payment plans, 5 languages</td>
+            <td>SleekFlow, WACTO, Wati are generic broadcast tools. No Dubai RE-specific training data, no DLD pricing, no Hindi/Arabic multilingual conversion AI.</td>
+            <td>SaaS: AED 550-1,100/agent/month</td>
+            <td><strong>USD 72-144M ARR</strong></td>
+            <td><span class="tag win">Primary</span></td>
+          </tr>
+          <tr data-cat="enterprise nri">
+            <td class="gnum">04</td>
+            <td><strong>KYC/AML automation layer</strong> — biometric verification, FATF compliance, RERA-compliant contract automation before MOU</td>
+            <td>FATF mandates strict cross-border RE scrutiny. Veriff, Jumio, ComplyAdvantage APIs exist but none embedded in Dubai RE sales flow. Indian buyers face Income Tax notices.</td>
+            <td>Enterprise SaaS: AED 2,000-8,000/brokerage/month</td>
+            <td><strong>USD 25-60M</strong></td>
+            <td><span class="tag">High</span></td>
+          </tr>
+          <tr data-cat="core quick">
+            <td class="gnum">05</td>
+            <td><strong>Secondary vs off-plan routing AI</strong> — dynamic buyer routing based on yield goals and live 15%+ price divergence</td>
+            <td>Live secondary property price correction vs. premium off-plan is unexploited by any AI. No tool routes buyers based on stated income vs. capital appreciation goals.</td>
+            <td>Commission routing fees + SaaS premium</td>
+            <td><strong>USD 30-70M</strong></td>
+            <td><span class="tag">High</span></td>
+          </tr>
+          <tr data-cat="nri enterprise">
+            <td class="gnum">06</td>
+            <td><strong>Cross-border India-Dubai transaction platform</strong> — FEMA/LRS compliance, POA flows, NRE account integration, TCS calculation</td>
+            <td>LRS limits ($250K/year), 20% TCS on remittances, Form 15CA/15CB requirements, Schedule FA disclosure obligations — no single platform guides NRI buyers through end-to-end legally.</td>
+            <td>Transaction fee 0.2-0.5% + mortgage referral</td>
+            <td><strong>USD 40-100M</strong></td>
+            <td><span class="tag">High</span></td>
+          </tr>
+          <tr data-cat="enterprise">
+            <td class="gnum">07</td>
+            <td><strong>Developer-broker performance marketplace</strong> — AI-ranked distribution by nationality, conversion history, language capability</td>
+            <td>Developers manage 5,000+ broker relationships via WhatsApp groups. No platform tracks performance by buyer nationality, language, area expertise, or historical conversion rate.</td>
+            <td>0.1-0.25% of brokered off-plan transaction value</td>
+            <td><strong>USD 60-150M</strong></td>
+            <td><span class="tag out">Medium</span></td>
+          </tr>
+          <tr data-cat="quick">
+            <td class="gnum">08</td>
+            <td><strong>Commission tracking and broker BI</strong> — multi-developer commission forecasting, milestone tracking, P&amp;L for individual brokers</td>
+            <td>Commission flows from multiple developers at different rates and milestone schedules are tracked in spreadsheets by every Dubai broker. Zero dedicated tool exists.</td>
+            <td>SaaS: AED 370-740/agent/month</td>
+            <td><strong>USD 48-96M ARR</strong></td>
+            <td><span class="tag out">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout ok">
+      <p><strong>The strategic verdict:</strong> Gaps 01, 02, and 03 form the core DealFlow AI platform. Gap 04 (KYC/AML) is the enterprise upgrade that creates regulatory moat. Gap 05 (routing AI) requires zero new infrastructure — it is a pure-data play using existing DLD feeds. Five gaps addressable with one product. Zero competitors in any of them today.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WIN SECTION -->
+<section id="win">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">06 — Competitive Strategy</span>
+      <div class="sec-tag">Where we play, where we do not, and why</div>
+      <h2>HOW WE WIN<br>WITHOUT COMPETING</h2>
+    </div>
+
+    <div class="evidence-grid">
+      <div class="ev reveal"><span class="ev-n">43%</span><span class="ev-l">International buyers using AI/VR before engaging any broker</span><span class="ev-s">Dubai PropTech Market Report 2025</span></div>
+      <div class="ev reveal"><span class="ev-n">$200M</span><span class="ev-l">MENA PropTech raised in H1 2025 alone</span><span class="ev-s">MENA PropTech VC data H1 2025</span></div>
+      <div class="ev reveal"><span class="ev-n">86%</span><span class="ev-l">Indian HNWIs planning to invest in Dubai</span><span class="ev-s">Knight Frank / Economy Middle East 2025</span></div>
+      <div class="ev reveal"><span class="ev-n">99%</span><span class="ev-l">YoY growth in Dubai broker commissions H1 2025</span><span class="ev-s">DLD official data, 2025</span></div>
+    </div>
+
+    <h3 style="margin:2.5rem 0 1.2rem;">The Play Matrix</h3>
+    <div class="win-matrix">
+      <div class="wm-row hdr">
+        <div class="wm-c">Approach</div>
+        <div class="wm-c">Evidence</div>
+        <div class="wm-c">DealFlow AI Position</div>
+        <div class="wm-c">Why</div>
+      </div>
+      <div class="wm-row">
+        <div class="wm-c">Bypass brokers (Nomad Homes model)</div>
+        <div class="wm-c">Nomad raised $44M but shows "very low activity." Requires massive human advisory backend. Unscalable unit economics across multi-market operations.</div>
+        <div class="wm-c"><span class="tag threat">We do NOT compete with brokers</span></div>
+        <div class="wm-c">40,000 RERA-licensed brokers own the regulatory, trust, and relationship infrastructure. Replacing them requires replicating 40,000 legal entities. Enabling them requires one SaaS platform.</div>
+      </div>
+      <div class="wm-row hi">
+        <div class="wm-c">Enable brokers</div>
+        <div class="wm-c">Broker market: 40,000 agents, AED 13.7B commissions. 5% SaaS penetration of 4,000 NRI-specialist agents at AED 1,200/month = USD 28M ARR from SaaS alone.</div>
+        <div class="wm-c"><span class="tag win">Our PRIMARY strategy</span></div>
+        <div class="wm-c">Making brokers 3-5x more productive is a win-win: their commissions go up, our SaaS revenue goes up, and we earn referral fees on the additional closings our AI generates.</div>
+      </div>
+      <div class="wm-row">
+        <div class="wm-c">Compete with portals (Property Finder/Bayut)</div>
+        <div class="wm-c">Property Finder has $775M+ funding and 60%+ EBITDA margins. Bayut has 87M visits and a DLD MoU. Building a competing portal takes 5-7 years and $200M+.</div>
+        <div class="wm-c"><span class="tag threat">We do NOT compete with portals</span></div>
+        <div class="wm-c">We need their lead volume. They need our conversion capability. The relationship is symbiotic, not adversarial.</div>
+      </div>
+      <div class="wm-row hi">
+        <div class="wm-c">Complement portals (conversion layer)</div>
+        <div class="wm-c">Portals generate leads at 2-5% conversion. The 95-98% that goes unconverted is the market. Every broker who subscribes to DealFlow AI increases their portal ROI — making DealFlow AI's value visible in portal metrics.</div>
+        <div class="wm-c"><span class="tag win">Our CORE insertion point</span></div>
+        <div class="wm-c">We sit after the portal in the funnel, before the broker. Portal leads flow in; qualified, scored buyer handoffs flow out. We are the conversion intelligence layer portals cannot build because they generate leads, not close them.</div>
+      </div>
+    </div>
+
+    <h3 style="margin:2.5rem 0 1.2rem;">Where We Play vs. Where We Do Not</h3>
+    <div class="dt-wrap">
+      <table class="dt">
+        <thead><tr><th>Market Segment</th><th>Strategy</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>Mid-market off-plan (AED 500K-2M)</td><td><span class="tag win">Primary launch market</span></td><td>JVC alone: 10,000+ transactions in 2024. Average Indian NRI buyer budget USD 250K-800K. Perfect LRS limit fit. Highest junk lead volume per brokerage.</td></tr>
+          <tr><td>NRI buyer segment (Indian, Russian, Chinese)</td><td><span class="tag win">Entry niche with moat</span></td><td>Indians are #1 foreign buyer at 22%. 86% of Indian HNWIs plan Dubai investment. AED 35B invested annually. Zero AI-native product for this segment today.</td></tr>
+          <tr><td>PropSpace CRM integration</td><td><span class="tag win">Priority integration</span></td><td>35,000+ broker users already on PropSpace. DealFlow AI adds AI scoring and WhatsApp conversion on top of existing workflow. Zero disruption to broker tools.</td></tr>
+          <tr><td>Ultra-luxury (AED 10M+)</td><td><span class="tag out">Phase 2 expansion</span></td><td>Only 4% of transaction volume in 2025. Relationship-driven, not data-driven at this tier. Enter after mid-market conversion economics are proven.</td></tr>
+          <tr><td>Commercial leasing</td><td><span class="tag out">Phase 3 expansion</span></td><td>Different product architecture required. Build after residential platform achieves product-market fit.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">07 — Implementation Roadmap</span>
+      <div class="sec-tag">Phased build from prototype to market-defining platform</div>
+      <h2>FROM PROTOTYPE<br>TO PLATFORM</h2>
+    </div>
+
+    <div class="phases">
+      <div class="ph reveal">
+        <span class="ph-n">Phase 0</span>
+        <span class="ph-title">Foundation</span>
+        <span class="ph-time">Weeks 1-4</span>
+        <ul>
+          <li>DLD API integration and data pipeline setup</li>
+          <li>Hindi, English, Arabic NLP training on FEMA, LRS, off-plan payment structures</li>
+          <li>WhatsApp Business API provisioning</li>
+          <li>Secondary vs off-plan routing logic scripted</li>
+          <li>Sanali pipeline as internal sandbox environment</li>
+        </ul>
+        <div class="ph-stat">Revenue target<strong>Zero — Build Phase</strong></div>
+      </div>
+      <div class="ph reveal">
+        <span class="ph-n">Phase 1</span>
+        <span class="ph-title">Sanali Pilot</span>
+        <span class="ph-time">Weeks 5-12</span>
+        <ul>
+          <li>WhatsApp AI on The Edge and Spazio pipelines</li>
+          <li>Qualifies every inbound NRI inquiry automatically</li>
+          <li>Lead scoring dashboard for Sanali sales team</li>
+          <li>Site visit booking with automated reminders</li>
+          <li>Russian and Mandarin language modules</li>
+          <li>PropSpace CRM handoff with conversation context</li>
+        </ul>
+        <div class="ph-stat">Revenue target<strong>Indirect — Rs. 50-100 Cr incremental uplift over 12 months</strong></div>
+      </div>
+      <div class="ph reveal">
+        <span class="ph-n">Phase 2</span>
+        <span class="ph-title">Broker Scale</span>
+        <span class="ph-time">Months 4-9</span>
+        <ul>
+          <li>DealFlow AI productized for external brokerages</li>
+          <li>PropSpace API integration for zero-disruption adoption</li>
+          <li>WhatsApp nurture sequences and DLD pricing widget</li>
+          <li>KYC/AML beta layer (Veriff or Jumio pilot)</li>
+          <li>50-150 NRI-specialist brokers as early adopters</li>
+        </ul>
+        <div class="ph-stat">Revenue target<strong>AED 480K-2.16M ARR</strong></div>
+      </div>
+      <div class="ph reveal">
+        <span class="ph-n">Phase 3</span>
+        <span class="ph-title">Platform</span>
+        <span class="ph-time">Months 7-18</span>
+        <ul>
+          <li>Developer marketplace with off-plan NRI routing</li>
+          <li>Full KYC/AML + Naya contract automation</li>
+          <li>Mortgage integration via Huspy partnership</li>
+          <li>POA document workflows for India-based buyers</li>
+          <li>Launch at PropTech Connect 2026 — DLD-hosted conference</li>
+        </ul>
+        <div class="ph-stat">Revenue target<strong>$8-15M ARR</strong></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The timing imperative:</strong> PropTech Connect 2026, the world's largest real estate technology conference hosted by DLD, takes place in Dubai in 2026. Being live with a demonstrable NRI buyer AI product at that event, with Sanali Group as a founding developer partner, is the credibility-defining moment that sets the market narrative for the next three years. The window to own that narrative is open right now. In 12-18 months this capability will be expected, not impressive.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section id="conclusion">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-n">08 — Conclusion</span>
+      <div class="sec-tag">The five gaps that define our market position</div>
+      <h2>FIVE DECISIVE GAPS<br>NO COMPETITOR CAN<br>FILL QUICKLY</h2>
+    </div>
+
+    <p style="max-width:72ch;margin-bottom:2.5rem;color:rgba(255,255,255,0.5);">After mapping 12 competitors across 4 tiers, the verdict is clear. No single player occupies the conversion intelligence layer. Every portal, every AI startup, every CRM, and every Indian portal stops at exactly the point where the real work begins: converting a hesitant NRI buyer into a closed deal.</p>
+
+    <div class="five-gaps">
+      <div class="fg">
+        <div class="fg-n">01</div>
+        <div class="fg-c">
+          <h3>WhatsApp-Native AI Lead Conversion Pipeline</h3>
+          <p>No competitor offers automated, conversational lead nurturing through WhatsApp with Dubai RE-specific NLP. Bayut distributes unscored leads to 10+ agents. Property Finder delivers leads to CRMs with no nurturing follow-up. The market needs an AI agent that qualifies, educates, and books viewings autonomously. This alone addresses the core broker pain point of 94% lead abandonment.</p>
+          <span class="evidence">Evidence: 8M+ UAE WhatsApp users, 90%+ open rates. "WhatsApp is not optional for Dubai brokers in 2025" — industry consensus documented across multiple broker guides.</span>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-n">02</div>
+        <div class="fg-c">
+          <h3>End-to-End NRI Buyer Journey Automation</h3>
+          <p>Indians are 22% of Dubai transactions and the #1 foreign buyer. MagicBricks cannot register foreign phone numbers. 99acres has 442 unverified listings. Bayut and Property Finder publish blog posts but have zero NRI product. DealFlow AI owns the full NRI journey: discovery in India, FEMA compliance planning, LRS tracking, property matching, virtual viewings, broker connection, Golden Visa guidance. This entire journey is unowned by technology today.</p>
+          <span class="evidence">Evidence: AED 35B annually from Indian buyers. 86% of Indian HNWIs plan Dubai investment (Knight Frank 2025). Zero AI-native NRI platforms exist in the market.</span>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-n">03</div>
+        <div class="fg-c">
+          <h3>FEMA/LRS Compliance Automation</h3>
+          <p>The regulatory complexity of buying Dubai property from India is a massive friction point with no technology solution. LRS limit of $250K/year, 20% TCS on remittances over ₹10 lakh (April 2025), Schedule FA disclosure obligations, Form 15CA/15CB CA certification requirements. Building an automated compliance layer creates genuine switching costs and positions DealFlow AI as the trusted first stop for every NRI buyer, before they ever speak to a human broker.</p>
+          <span class="evidence">Evidence: Income Tax notices being issued to NRI Dubai property buyers. FATF mandates strict cross-border scrutiny. No existing platform automates any element of this compliance workflow.</span>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-n">04</div>
+        <div class="fg-c">
+          <h3>AI Lead Scoring for the 40,000-Broker Market</h3>
+          <p>PropSpace CRM is the system of record for 35,000+ Dubai brokers. It stores leads but cannot score them. No platform tells brokers which of their 200 portal leads will close this week, what content to send them, or when to call. DealFlow AI sits on top of PropSpace via API integration — adding the intelligence layer that transforms a database of phone numbers into a ranked, actionable pipeline with full NRI compliance context and conversation history.</p>
+          <span class="evidence">Evidence: PropSpace Trustpilot users praise the CRM but report zero AI features. GetApp reviews: "basic automation only, no predictive features." Documented broker complaint pattern across industry forums.</span>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fg-n">05</div>
+        <div class="fg-c">
+          <h3>Cross-Border Trust Infrastructure</h3>
+          <p>NRI buyers' #1 pain point is trust: fear of scams, fake listings, unlicensed agents, and deposits to non-escrow accounts. Building verified broker profiles (RERA license verification, DLD transaction history, client reviews), escrow compliance confirmation, and developer track record analysis creates a trust layer no portal provides for cross-border buyers. Combined with FEMA/LRS compliance automation, this positions DealFlow AI as the indispensable trusted intermediary for the India-to-Dubai corridor — a role worth significantly more than SaaS fees alone.</p>
+          <span class="evidence">Evidence: Real estate scam complaints in Dubai documented across Trustpilot, GoDubai.estate, and consumer complaint portals. NRI buyers report losing deposits to non-RERA agents. No platform currently verifies broker credentials for cross-border buyers.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>DealFlow AI Competitive Intelligence Report | MSP for Sanali Group | March 2026 | Confidential</p>
+</footer>
+
+<script>
+// PROGRESS
+window.addEventListener('scroll', () => {
+  document.getElementById('prog').style.width =
+    (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+});
+
+// NAV ACTIVE
+const secs = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-links a');
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => {
+        l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id);
+      });
+    }
+  });
+}, { threshold: 0.25 });
+secs.forEach(s => navObs.observe(s));
+
+// FUNNEL BARS
+const fObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    document.querySelectorAll('.frow-bar').forEach(b => { b.style.width = b.dataset.w; });
+  }
+}, { threshold: 0.3 });
+const fEl = document.getElementById('funnelEl');
+if (fEl) fObs.observe(fEl);
+
+// PLAYER CARD TOGGLE
+function togglePc(card) {
+  const was = card.classList.contains('open');
+  document.querySelectorAll('.pc').forEach(c => c.classList.remove('open'));
+  if (!was) card.classList.add('open');
+}
+
+// SWOT TAB
+function showSwot(id, btn) {
+  document.querySelectorAll('.swot-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.swot-btn').forEach(b => b.classList.remove('on'));
+  const el = document.getElementById('swot-' + id);
+  if (el) el.classList.add('active');
+  btn.classList.add('on');
+}
+
+// GAP FILTER
+function filterGaps(cat, btn) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#gapTable tbody tr').forEach(row => {
+    row.style.display = cat === 'all' || (row.dataset.cat || '').includes(cat) ? '' : 'none';
+  });
+}
+
+// SCROLL REVEAL
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+</script>
+</body>
+</html>
